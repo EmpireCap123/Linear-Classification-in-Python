@@ -44,7 +44,7 @@ SGDClassifier(alpha=0.0001, average=False, class_weight=None, epsilon=0.1,
        penalty='l2', power_t=0.5, random_state=None, shuffle=True,
        verbose=0, warm_start=False)
        
-# Regularization ~ Ridge (L1), Lasso (L2), Elastic Net (L1 + L2)
+# Regularization ~ Lasso (L1), Ridge (L2), Elastic Net (L1 + L2)
        
 # Evaluate the model
 from sklearn import metrics
