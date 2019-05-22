@@ -1,5 +1,27 @@
 https://adataanalyst.com/scikit-learn/linear-classification-method/
 
+# Assumptions of Linear Regression
+# 1) Mean of residuals is zero (unbiased)
+# 2) Homoscedasticity of residuals, or equal variance over the distribution of outcomes
+# 3) No autocorrelation of residuals (common in time series, correct with lag factor)
+# 4) The independent variables and the residuals of the estimates are uncorrelated
+# 5) Number of observations must be larger than the number of independent variables
+# 6) Positive variance for each independent variable
+# 7) Model is correctly specified (for linear regression/classification, should be linear relationship between independent and dependent variables)
+# 8) No significant correlation between independent variables (VIF < 5, or remove the highest VIF variable)
+# 9) Residuals have a normal distribution
+# How to check assumptions of a fitted model
+par(mfrow=c(2,2))  # draw 4 plots in same window
+mod <- lm(dist ~ speed, data=cars)
+gvlma::gvlma(mod)
+#=>                     Value  p-value                   Decision
+#=> Global Stat        15.801 0.003298 Assumptions NOT satisfied!
+#=> Skewness            6.528 0.010621 Assumptions NOT satisfied!
+#=> Kurtosis            1.661 0.197449    Assumptions acceptable.
+#=> Link Function       2.329 0.126998    Assumptions acceptable.
+#=> Heteroscedasticity  5.283 0.021530 Assumptions NOT satisfied!
+plot(mod)
+
 %pylab inline
 #Populating the interactive namespace from numpy and matplotlib
 #Import scikit-learn, numpy and pyplot
