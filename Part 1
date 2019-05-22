@@ -53,11 +53,32 @@ print (metrics.accuracy_score(y_train, y_train_pred))
 y_pred = clf.predict(X_test)
 print (metrics.accuracy_score(y_test, y_pred))
 
-# Precision, Recall, and F Score
-print (metrics.classification_report(y_test, y_pred, target_names=iris.target_names))
 
 # Confusion Matrix
 print (metrics.confusion_matrix(y_test, y_pred))
+
+[[ 8  0  0]
+ [ 0  1 10]
+ [ 0  4 15]]
+
+# Precision, Recall, and F Score
+# Accuracy = (True Positive + True Negative) / Total = % of Total that were correctly classified
+# Precision = True Positive / (True Positive + False Positive) = % of Positive estimates that were correctly classified
+# Recall = True Positive / (True Positive + False Negative) = % of Positive that were correctly classsified
+# F-1 Score = 2 * Precision * Recall / (Precision + Recall)
+print (metrics.classification_report(y_test, y_pred, target_names=iris.target_names))
+
+             precision    recall  f1-score   support
+
+     setosa       1.00      1.00      1.00         8
+ versicolor       0.20      0.09      0.13        11
+  virginica       0.60      0.79      0.68        19
+
+avg / total       0.57      0.63      0.59        38
+
+# ROC curve 
+# x axis = false positive rate (lower is better) = 1 - specificity    {specificity = true negative rate}
+# y axis = true positive rate (higher is better) = sensitivity
 
 #Create a new classifier: a pipeline of the standarizer and the linear model. 
 #Measure the cross-validation accuracy.
