@@ -1,0 +1,88 @@
+https://adataanalyst.com/scikit-learn/linear-classification-method/
+
+%pylab inline
+#Populating the interactive namespace from numpy and matplotlib
+#Import scikit-learn, numpy and pyplot
+import sklearn as sk
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Load Iris dataset
+from sklearn import datasets
+iris = datasets.load_iris()
+X_iris, y_iris = iris.data, iris.target
+
+from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Get dataset with only the first two attributes
+X, y = X_iris[:,:2], y_iris
+# Split the dataset into a training and a testing set
+# Test set will be the 25% taken randomly
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=33)
+print (X_train.shape, y_train.shape)
+
+# Standarize the features
+# Feature Scaling
+#For each feature, calculate the average, subtract the mean
+#value from the feature value, and divide the result by their standard deviation. After
+#scaling, each feature will have a zero average, with a standard deviation of one.
+scaler = StandardScaler().fit(X_train)
+X_train = scaler.transform(X_train)
+
+X_test = scaler.transform(X_test)
+
+# create the linear model classifier
+from sklearn.linear_model import SGDClassifier
+clf = SGDClassifier()
+# fit (train) the classifier
+clf.fit(X_train, y_train)
+
+SGDClassifier(alpha=0.0001, average=False, class_weight=None, epsilon=0.1,
+       eta0=0.0, fit_intercept=True, l1_ratio=0.15,
+       learning_rate='optimal', loss='hinge', n_iter=5, n_jobs=1,
+       penalty='l2', power_t=0.5, random_state=None, shuffle=True,
+       verbose=0, warm_start=False)
+       
+# Evaluate the model
+from sklearn import metrics
+y_train_pred = clf.predict(X_train)
+print (metrics.accuracy_score(y_train, y_train_pred))
+
+#Measure accuracy on the testing set
+y_pred = clf.predict(X_test)
+print (metrics.accuracy_score(y_test, y_pred))
+
+# Precision, Recall, and F Score
+print (metrics.classification_report(y_test, y_pred, target_names=iris.target_names))
+
+# Confusion Matrix
+print (metrics.confusion_matrix(y_test, y_pred))
+
+#Create a new classifier: a pipeline of the standarizer and the linear model. 
+#Measure the cross-validation accuracy.
+
+from sklearn.cross_validation import cross_val_score, KFold
+from sklearn.pipeline import Pipeline
+
+# create a composite estimator made by a pipeline of the standarization and the linear model
+clf = Pipeline([
+        ('scaler', StandardScaler()),
+        ('linear_model', SGDClassifier())
+])
+# create a k-fold croos validation iterator of k=5 folds
+cv = KFold(X.shape[0], 5, shuffle=True, random_state=33)
+# by default the score used is the one returned by score method of the estimator (accuracy)
+scores = cross_val_score(clf, X, y, cv=cv)
+print (scores)
+
+#Calculate the mean and standard error of cross-validation accuracy
+
+from scipy.stats import sem
+
+def mean_score(scores):
+    """Print the empirical mean score and standard error of the mean."""
+    return ("Mean score: {0:.3f} (+/-{1:.3f})").format(
+        np.mean(scores), sem(scores))
+
+print (mean_score(scores))
